@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Post
+from .models import Post,  Review
 from django.http import HttpResponse, HttpRequest
 
 
@@ -13,7 +13,7 @@ def add_post(request:HttpRequest):
         new_post = Post(title = request.POST.get('title'), content = request.POST.get('content'), published_at = request.POST.get('published_at'), is_published = request.POST.get('is_published') == 'on',image=request.FILES["image"])
         new_post.save()
 
-        # new_post = Game(title=request.POST["title"], description=request.POST["description"], publisher=request.POST["publisher"], rating=request.POST["rating"], release_date=request.POST["release_date"], poster=request.FILES["poster"])
+        # new_post = post(title=request.POST["title"], description=request.POST["description"], publisher=request.POST["publisher"], rating=request.POST["rating"], release_date=request.POST["release_date"], poster=request.FILES["poster"])
         # new_post.save()
 
         #return redirect('app_main:home_view')
@@ -24,8 +24,10 @@ def add_post(request:HttpRequest):
 def details(request:HttpRequest, post_id:int):
 
     post = Post.objects.get(id=post_id)
+    reviews = Review.objects.filter(post=post)
 
-    return render(request, 'app_main/detail.html', {'post': post})
+
+    return render(request, 'app_main/detail.html', {'post': post, "reviews":reviews})
 
 
 def update(request:HttpRequest, post_id):
@@ -52,3 +54,10 @@ def delete(request:HttpRequest, post_id):
       
 
     return render(request,'app_main/home.html', {'post': post})
+
+def review(request:HttpRequest, post_id):
+    if request.method == "POST":
+        post_object= Post.objects.get(pk=post_id)
+        new_review= Review(post=post_object, name = request.POST['name'], rating = request.POST['rating'], comment = request.POST['comment'])
+        new_review.save()
+    return redirect("app_main:details", post_id=post_id) 

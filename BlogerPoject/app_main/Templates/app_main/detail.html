@@ -15,4 +15,46 @@
         <h6>{{ post.content }}</h6>
         <h6>Published at: {{ post.published_at }}</h6>
     </div>
+
+
+
+    <hr />
+
+    <h2>Comments ({{reviews.count}})</h2>
+    
+    <div class="d-flex flex-column gap-3">
+        {% for review in reviews %}
+            <div class="d-flex flex-column p-3 shadow">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h4>{{review.name}}</h4>
+                    <div class="d-flex align-items-center">
+                        <span class="material-symbols-outlined">star</span>
+                        <h5 class="m-0 p-0">{{review.rating}}</h5>
+                    </div>
+                </div>
+                
+                <p>{{review.comment}}</p>
+                <p class="text-muted">{{review.created_at}}</p>
+            </div>
+        {% endfor %}
+    </div>
+    
+    
+    <h2 class="mt-5">Add Comment</h2>
+    <form class="d-flex flex-column gap-2" action="{% url 'app_main:review' post.id %}" method="post">
+        {% csrf_token %}
+        <input class="form-control" name="name" required minlength="3" placeholder="name"/>
+        <textarea class="form-control" name="comment" required minlength="3" placeholder="Comment..."></textarea>
+        <select class="form-select" name="rating" required>
+            <option value="">Rating</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+        </select>
+        <input type="submit" class="btn btn-primary" value="Add Review" />
+    </form>
+
+    
 {% endblock %}

@@ -19,3 +19,12 @@ class Post(models.Model):
     image = models.ImageField(upload_to="img/", default="img/default.jpg")
 
     rating = models.SmallIntegerField(choices=RatingChoices.choices)
+
+class Review(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    name = models.CharField(max_length=1024)
+    rating = models.SmallIntegerField()
+    comment = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+
