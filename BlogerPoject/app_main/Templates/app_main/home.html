@@ -5,9 +5,10 @@
     {% for post in posts %}
         <div class="post">
             <img src="{{post.image.url}}"  width="100px" alt="">
-            <h3>{{ post.title }}</h3>
+            <a href="{% url 'app_main:update' post.id %}" class="btn btn-primar">update</a>
             <p>{{ post.content }}</p>
             <small>Published at: {{ post.published_at }}</small>
+            <h6>{{post.details}}</h6>
         </div>
     {% endfor %}
 {% endblock %}
